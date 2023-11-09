@@ -78,5 +78,7 @@ private val imagenes = listOf(
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun barraBuscadorPreview() {
+    barraBuscador()
+
 }
