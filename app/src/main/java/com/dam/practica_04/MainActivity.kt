@@ -8,13 +8,16 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
@@ -22,26 +25,47 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,29 +73,69 @@ import com.dam.practica_04.ui.theme.Practica_04Theme
 
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Practica_04Theme {
-                principalAPP()
+            val windowSizeClass = calculateWindowSizeClass(this)
+            principalAPP(windowSizeClass)
             }
         }
     }
-}
-// "MAIN" DE LA APP QUE MUESTRA EN EL EMULADOR
+
+// MAIN PRINCIPAL
 @Composable
-fun principalAPP(){
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-        item() {
-            barraBuscador()
+fun principalAPP(windowSize: WindowSizeClass){
+    when(windowSize.widthSizeClass){
+        WindowWidthSizeClass.Compact ->{
+            botoneraIconos()
         }
-        item(){
-            tituloPlatosDestacados()
+        WindowWidthSizeClass.Medium ->{
+            botonera()
         }
-        item {
+    }
+}
+
+// SECCION RANURA PRINCIPAL
+@Composable
+fun seccionPrincipal(
+    @StringRes title: Int,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Column(modifier){
+        Text(stringResource(title),
+            style= MaterialTheme.typography.titleMedium,
+            modifier= Modifier
+                .paddingFromBaseline(
+                    top = 40.dp,
+                    bottom = 16.dp
+                )
+                .padding(horizontal = 16.dp))
+        content()
+    }
+}
+
+//PANTALLA PRINCIPAL
+@Composable
+fun pantallaAPP(modifier: Modifier = Modifier) {
+    Column(modifier.verticalScroll(rememberScrollState())) {
+        Spacer(Modifier.height(16.dp))
+        barraBuscador(Modifier.padding(horizontal = 16.dp))
+        seccionPrincipal(title = R.string.TITULO1) {
             platosDestacadosRow()
         }
+        seccionPrincipal(title = R.string.TITULO2) {
+            ilustracionesGrid()
+        }
+        seccionPrincipal(title = R.string.titulorecetas) {
+            recetario1()
+            recetario2()
+            recetario3()
+        }
 
+
+        Spacer(Modifier.height(16.dp))
     }
 
 }
@@ -95,6 +159,94 @@ fun barraBuscador(modifier: Modifier= Modifier)
             .heightIn(min = 56.dp)
     )
 }
+
+// ICONOS BARRA NAVEGACION
+@Composable
+private fun barraNavIconos(modifier: Modifier = Modifier) {
+    NavigationBar(modifier= modifier, containerColor = MaterialTheme.colorScheme.secondary) {
+        NavigationBarItem(
+            selected = true,
+            onClick = { /*TODO*/ },
+            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = null)},
+            label= { Text(text= stringResource(R.string.ic1))}
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { /*TODO*/ },
+            icon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null)},
+            label= { Text(text= stringResource(R.string.ic2))}
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { /*TODO*/ },
+            icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = null)},
+            label= { Text(text= stringResource(R.string.ic3))}
+        )
+    }
+}
+
+// BOTONERA ICONOS
+@Composable
+fun botoneraIconos() {
+    Practica_04Theme {
+        Scaffold(
+            bottomBar = { barraNavIconos()}
+        ) {
+                padding -> pantallaAPP(Modifier.padding(padding))
+        }
+    }
+
+}
+
+// RAIL PARA ICONOS VERTICAL/HORIZONTAL NAVEGACION
+@Composable
+private fun botoneraIconosRail(modifier: Modifier = Modifier) {
+    NavigationRail(
+        modifier = modifier.padding(start = 8.dp, end = 8.dp),
+        containerColor = MaterialTheme.colorScheme.secondary
+    ) {
+        Column(
+            modifier = modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        )
+        {
+
+            NavigationRailItem(
+                label = { Text(stringResource(R.string.ic1)) },
+                selected = true,
+                onClick = { /*TODO*/ },
+                icon = { Icon(imageVector = Icons.Default.Home, contentDescription = null) }
+            )
+            NavigationRailItem(
+                label = { Text(stringResource(R.string.ic2)) },
+                selected = false,
+                onClick = { /*TODO*/ },
+                icon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null) }
+            )
+            NavigationRailItem(
+                label = { Text(stringResource(R.string.ic3)) },
+                selected = false,
+                onClick = { /*TODO*/ },
+                icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = null) }
+            )
+        }
+    }
+}
+ // BOTONERA COMPLETA
+@Composable
+fun botonera(){
+     Practica_04Theme{
+         Surface(color= MaterialTheme.colorScheme.secondary) {
+             Row{
+                 botoneraIconosRail()
+                 pantallaAPP()
+             }
+         }
+     }
+}
+
+
 // ELEMETO INDIVIDUAL LAZY ROW PLATOS DESTACADOS
 @Composable
 fun platosDestacadosElemento(
@@ -150,10 +302,23 @@ fun platosDestacadosRow(modifier: Modifier = Modifier)
         }
     }
 }
-// ICONOS CON ANIMACIONES GUAPAS
-
 // TITULO DE LAS ILUSTRACIONES DE LOS PLATOS
-
+@Composable
+fun tituloIlustraciones(){
+    Surface(
+        color = MaterialTheme.colorScheme.primary,
+        border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.secondary),
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .fillMaxSize()
+            .animateContentSize()
+    ) {
+        Text("ILUSTRACIONES",
+            textAlign = TextAlign.Center,
+            modifier = Modifier.width(150.dp)
+        )
+    }
+}
 // ELEMENTO GRID CON LAS ILUSTRACIONES DE LOS PLATOS
 @Composable
 fun ilustracionElemento(
@@ -168,17 +333,161 @@ fun ilustracionElemento(
             Image(painter = painterResource(drawable),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.size(80.dp))
+                modifier = Modifier
+                    .size(200.dp)
+                    .clip(RoundedCornerShape(16.dp)))
             Text(text= stringResource(text),
                 style= MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal= 16.dp)
+                modifier = Modifier.padding(horizontal= 20.dp)
             )
         }
     }
-
+}
+// GRID DE ILUSTRACIONES
+@Composable
+fun ilustracionesGrid(
+    modifier: Modifier = Modifier
+) {
+    LazyHorizontalGrid(rows= GridCells.Fixed(2),
+        contentPadding= PaddingValues(horizontal= 16.dp),
+        horizontalArrangement= Arrangement.spacedBy(16.dp),
+        verticalArrangement= Arrangement.spacedBy(20.dp),
+        modifier= modifier.height(168.dp)){
+        items(imagenes2){
+                item -> platosDestacadosElemento(item.drawable, item.text,
+            modifier= modifier.height(80.dp))
+        }
+    }
 }
 
+// SURFACES EXPANDIDOS CON LAS RECETAS
+@Composable
+fun recetario1(){
+    var isExpanded by remember { mutableStateOf(false) }
+    Surface(
+        color = MaterialTheme.colorScheme.primary,
+        border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.tertiary),
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .padding(10.dp)
+            .animateContentSize()
+    ) {
+        Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
+            Text(
+                text ="TORTILLA DE PATATAS",
+                modifier = Modifier.padding(2.dp),
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Corta y fríe patatas en rodajas en aceite de oliva hasta que estén tiernas.\n" +
+                        "Pica cebolla y bate huevos con sal.\n" +
+                        "Mezcla patatas y cebolla con huevos batidos.\n" +
+                        "Cocina en una sartén hasta que los bordes cuajen.\n" +
+                        "Voltea la tortilla para cocinar el otro lado.\n" +
+                        "Cocina hasta que esté cuajada pero jugosa por dentro.\n" +
+                        "Sirve caliente o a temperatura ambiente. ¡Disfruta!",
+                maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                modifier = Modifier.padding(2.dp)
 
+            )
+        }
+    }
+}
+
+@Composable
+fun recetario2(){
+    var isExpanded by remember { mutableStateOf(false) }
+    Surface(
+        color = MaterialTheme.colorScheme.primary,
+        border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.tertiary),
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .padding(10.dp)
+            .animateContentSize()
+    ) {
+        Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
+            Text(
+                text ="CARRILLADA",
+                modifier = Modifier.padding(2.dp),
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Carrillada en Salsa\n" +
+                        "\n" +
+                        "Preparación de la Carrillada:\n" +
+                        "\n" +
+                        "Sazona las carrilladas de cerdo con sal y pimienta.\n" +
+                        "Dóralas en una sartén con aceite caliente hasta que estén doradas por ambos lados.\n" +
+                        "Preparación de la Salsa:\n" +
+                        "\n" +
+                        "Pica cebolla, ajo y zanahoria.\n" +
+                        "Sofríe estos ingredientes en la misma sartén hasta que estén tiernos.\n" +
+                        "Añade vino tinto y caldo de carne. Deja cocinar hasta que la salsa se reduzca.\n" +
+                        "Cocción de la Carrillada:\n" +
+                        "\n" +
+                        "Coloca las carrilladas en la salsa y cocina a fuego lento hasta que estén tiernas.\n" +
+                        "Servir:\n" +
+                        "\n" +
+                        "Sirve las carrilladas bañadas en la salsa caliente.\n" +
+                        "Acompaña con guarniciones al gusto. ¡Listo para disfrutar!",
+                maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                modifier = Modifier.padding(2.dp)
+
+            )
+        }
+    }
+}
+
+@Composable
+fun recetario3(){
+    var isExpanded by remember { mutableStateOf(false) }
+    Surface(
+        color = MaterialTheme.colorScheme.primary,
+        border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.tertiary),
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .padding(10.dp)
+            .animateContentSize()
+    ) {
+        Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
+            Text(
+                text ="COCIDO",
+                modifier = Modifier.padding(2.dp),
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Cocido Tradicional\n" +
+                        "\n" +
+                        "Preparación de Ingredientes:\n" +
+                        "\n" +
+                        "Lava y corta vegetales como zanahorias, patatas y apio.\n" +
+                        "Trocea carne de res, pollo y chorizo.\n" +
+                        "Cocción del Caldo:\n" +
+                        "\n" +
+                        "Hierve la carne en agua con sal hasta que se forme un caldo sabroso.\n" +
+                        "Añade las verduras y cocina a fuego medio hasta que estén tiernas.\n" +
+                        "Cocido de Legumbres:\n" +
+                        "\n" +
+                        "Incorpora garbanzos y judías.\n" +
+                        "Cocina hasta que las legumbres estén tiernas y sabrosas.\n" +
+                        "Cocción de Embutidos:\n" +
+                        "\n" +
+                        "Agrega chorizo y morcilla al caldo para potenciar el sabor.\n" +
+                        "Cocina hasta que los embutidos estén bien cocidos.\n" +
+                        "Presentación:\n" +
+                        "\n" +
+                        "Sirve en platos hondos separando caldo, carne, verduras y legumbres.\n" +
+                        "Acompaña con salsa de tomate y guindillas al gusto.\n" +
+                        "¡Disfruta de este reconfortante cocido!",
+                maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                modifier = Modifier.padding(2.dp)
+
+            )
+        }
+    }
+}
+
+// -----------------> HAY QUE SEGUIR CON EL CHAT, COLO DE FONDO Y VER ALGUNA COSA MAS, LO PRINCIPAL ESTA
 
 // llamada a la clase que me sirve como plantilla y se le pasan los parametros de la lista de abajo
 private data class DrawableStringPair(
@@ -200,7 +509,12 @@ private val imagenes2 = listOf(
     R.drawable.ilustracion2 to R.string.ilustracion2,
     R.drawable.ilustracion3 to R.string.ilustracion3,
     R.drawable.ilustracion4 to R.string.ilustracion4,
-    R.drawable.ilustracion5 to R.string.ilustracion5
+    R.drawable.ilustracion5 to R.string.ilustracion5,
+    R.drawable.ilustracion6 to R.string.ilustracion6,
+    R.drawable.ilustracion7 to R.string.ilustracion7,
+    R.drawable.ilustracion8 to R.string.ilustracion8,
+    R.drawable.ilustracion9 to R.string.ilustracion9,
+    R.drawable.ilustracion10 to R.string.ilustracion10,
 ).map { DrawableStringPair(it.first, it.second) }
 // LISTA ICONOS
 private val iconos = listOf(
@@ -215,6 +529,21 @@ private val usuariosImagen = listOf(
     R.drawable.us1 to R.string.us1,
     R.drawable.us2 to R.string.us2,
 ).map { DrawableStringPair(it.first, it.second) }
+
+@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
+@Composable
+fun seccionPrincipalPreview() {
+    Practica_04Theme {
+        seccionPrincipal(R.string.ilustracion1){
+            platosDestacadosRow()
+        }
+    }
+}
+@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE, heightDp = 180)
+@Composable
+fun pantallaAPPPreview() {
+    Practica_04Theme { pantallaAPP() }
+}
 // PREVIEW BARRA BUSCADOR
 @Preview(showBackground = true)
 @Composable
@@ -250,6 +579,29 @@ fun ilustracionElementoPreview(){
                         drawable = R.drawable.ilustracion1,
                         text = R.string.ilustracion1)
 }
+// PREVIEW TITULO ILUSTRACIONES
+@Preview(showBackground = true)
+@Composable
+fun tituloIlustracionesPreview(){
+    tituloIlustraciones()
+}
+// PREVIEW GRID DE ILUSTRACIONES
+@Preview(showBackground = true)
+@Composable
+fun ilustracionesGridPreview(){
+    ilustracionesGrid()
+}
 
-
+// PREVIEW BOTONERA ICONOS
+@Preview(showBackground = true)
+@Composable
+fun botoneraIconosPreview(){
+    botoneraIconos()
+}
+// PREVIEW RAIL BOTONERA ICONOS
+@Preview(showBackground = true)
+@Composable
+fun botoneraIconosRailPreview(){
+    botoneraIconosRail()
+}
 
