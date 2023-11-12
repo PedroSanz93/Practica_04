@@ -8,6 +8,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -119,25 +120,34 @@ fun seccionPrincipal(
 //PANTALLA PRINCIPAL
 @Composable
 fun pantallaAPP(modifier: Modifier = Modifier) {
-    Column(modifier.verticalScroll(rememberScrollState())) {
-        Spacer(Modifier.height(16.dp))
-        barraBuscador(Modifier.padding(horizontal = 16.dp))
-        seccionPrincipal(title = R.string.TITULO1) {
-            platosDestacadosRow()
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        // Para el fondo del chat
+        Image(
+            painter = painterResource(id = R.drawable.fondopantalla),
+            contentScale = ContentScale.FillBounds,
+            contentDescription = "fondo",
+            modifier = Modifier.fillMaxSize()
+        )
+        Column(modifier.verticalScroll(rememberScrollState())) {
+            Spacer(Modifier.height(16.dp))
+            barraBuscador(Modifier.padding(horizontal = 16.dp))
+            seccionPrincipal(title = R.string.TITULO1) {
+                platosDestacadosRow()
+            }
+            seccionPrincipal(title = R.string.TITULO2) {
+                ilustracionesGrid()
+            }
+            seccionPrincipal(title = R.string.titulorecetas) {
+                recetario1()
+                recetario2()
+                recetario3()
+            }
+            Spacer(Modifier.height(16.dp))
         }
-        seccionPrincipal(title = R.string.TITULO2) {
-            ilustracionesGrid()
-        }
-        seccionPrincipal(title = R.string.titulorecetas) {
-            recetario1()
-            recetario2()
-            recetario3()
-        }
-
-
-        Spacer(Modifier.height(16.dp))
     }
-
 }
 // BARRA BUSCADOR
 @OptIn(ExperimentalMaterial3Api::class)
