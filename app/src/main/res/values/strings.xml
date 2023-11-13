@@ -7,6 +7,7 @@
     <string name="fotoplato5">Cocido</string>
     <string name="fotoplato6">Papas Guisas</string>
     <string name="TITULO2">GASTRONOMIA ANDALUZA</string>
+    <string name="TITULO3">CHEFS DEL MES</string>
     <string name="ilustracion1">ilustracion1</string>
     <string name="ilustracion2">ilustracion2</string>
     <string name="ilustracion3">ilustracion3</string>
@@ -23,6 +24,11 @@
     <string name="us1">us1</string>
     <string name="us2">us2</string>
     <string name="lupa">Buscar..</string>
+    <string name="arguiyano">Carlos Arguiñano</string>
+    <string name="danig">Dani Garcia</string>
+    <string name="elenaarzak">Elena Arzak</string>
+    <string name="eva">Eva Arguiñano</string>
+    <string name="najat">Najat</string>
 
     <string name="titulorecetas">RECETAS ANDALUZAS</string>
 </resources>

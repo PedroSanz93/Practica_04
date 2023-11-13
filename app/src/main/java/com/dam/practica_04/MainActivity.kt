@@ -145,6 +145,10 @@ fun pantallaAPP(modifier: Modifier = Modifier) {
                 recetario2()
                 recetario3()
             }
+            seccionPrincipal(title = R.string.TITULO3) {
+                concinerosDestacadosRow()
+            }
+
             Spacer(Modifier.height(16.dp))
         }
     }
@@ -256,7 +260,6 @@ fun botonera(){
      }
 }
 
-
 // ELEMETO INDIVIDUAL LAZY ROW PLATOS DESTACADOS
 @Composable
 fun platosDestacadosElemento(
@@ -329,7 +332,7 @@ fun tituloIlustraciones(){
         )
     }
 }
-// ELEMENTO GRID CON LAS ILUSTRACIONES DE LOS PLATOS
+// ELEMENTO GRID CON LAS ILUSTRACIONES DE LOS PLATOS ANDALUCES
 @Composable
 fun ilustracionElemento(
     @DrawableRes drawable: Int,
@@ -497,6 +500,62 @@ fun recetario3(){
     }
 }
 
+@Composable
+fun cocinerosDestacadosElemento(
+    @DrawableRes drawable: Int,
+    @StringRes text: Int,
+    modifier: Modifier = Modifier
+)
+{
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier)
+    {
+        Image(painter = painterResource(drawable),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = modifier
+                .size(88.dp)
+                .clip(CircleShape)
+        )
+        Text(text= stringResource(text),
+            modifier= Modifier.paddingFromBaseline(top= 24.dp, bottom= 8.dp),
+            style= MaterialTheme.typography.bodyMedium)
+
+    }
+}
+// TITULO DEL LAZY ROW PLATOS DESTACADOS
+@Composable
+fun tituloCocinerosDestacados(){
+    Surface(
+        color = MaterialTheme.colorScheme.primary,
+        border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.secondary),
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .fillMaxSize()
+            .animateContentSize()
+    ) {
+        Text("COCINEROS DEL MES",
+            textAlign = TextAlign.Center,
+            modifier = Modifier.width(150.dp)
+        )
+    }
+}
+// LAZY ROW, ANIMACION Y LISTA DE IMAGENES PLATOS DESTACADOS
+@Composable
+fun concinerosDestacadosRow(modifier: Modifier = Modifier)
+{
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal= 16.dp),
+        modifier= modifier
+            .padding(horizontal = 8.dp)
+    ){
+        items(cocineros){// Llama a la lista IMAGENES QUE ES DONDE ESTA LOS QUE QUIERO
+                item -> platosDestacadosElemento(item.drawable, item.text)
+        }
+    }
+}
+
+
 // llamada a la clase que me sirve como plantilla y se le pasan los parametros de la lista de abajo
 private data class DrawableStringPair(
     @DrawableRes val drawable: Int,
@@ -524,6 +583,15 @@ private val imagenes2 = listOf(
     R.drawable.ilustracion9 to R.string.ilustracion9,
     R.drawable.ilustracion10 to R.string.ilustracion10,
 ).map { DrawableStringPair(it.first, it.second) }
+private val cocineros = listOf(
+
+    R.drawable.arguiyano to R.string.arguiyano,
+    R.drawable.eva to R.string.eva,
+    R.drawable.danig to R.string.danig,
+    R.drawable.elenaarzak to R.string.elenaarzak,
+    R.drawable.najat to R.string.najat
+).map { DrawableStringPair(it.first, it.second) }
+
 // LISTA ICONOS (NO SE USA AL FINAL)
 private val iconos = listOf(
 
