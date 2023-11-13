@@ -497,8 +497,6 @@ fun recetario3(){
     }
 }
 
-// -----------------> HAY QUE SEGUIR CON EL CHAT, COLO DE FONDO Y VER ALGUNA COSA MAS, LO PRINCIPAL ESTA
-
 // llamada a la clase que me sirve como plantilla y se le pasan los parametros de la lista de abajo
 private data class DrawableStringPair(
     @DrawableRes val drawable: Int,
@@ -526,14 +524,14 @@ private val imagenes2 = listOf(
     R.drawable.ilustracion9 to R.string.ilustracion9,
     R.drawable.ilustracion10 to R.string.ilustracion10,
 ).map { DrawableStringPair(it.first, it.second) }
-// LISTA ICONOS
+// LISTA ICONOS (NO SE USA AL FINAL)
 private val iconos = listOf(
 
     R.drawable.ic1 to R.string.ic1,
     R.drawable.ic2 to R.string.ic2,
     R.drawable.ic3 to R.string.ic3
 ).map { DrawableStringPair(it.first, it.second) }
-// LISTA FOTOS USUARIO
+// LISTA FOTOS USUARIO (NO SE USA AL FINAL)
 private val usuariosImagen = listOf(
 
     R.drawable.us1 to R.string.us1,
@@ -614,4 +612,3 @@ fun botoneraIconosPreview(){
 fun botoneraIconosRailPreview(){
     botoneraIconosRail()
 }
-
