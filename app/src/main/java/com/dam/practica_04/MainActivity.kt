@@ -550,7 +550,7 @@ fun concinerosDestacadosRow(modifier: Modifier = Modifier)
             .padding(horizontal = 8.dp)
     ){
         items(cocineros){// Llama a la lista IMAGENES QUE ES DONDE ESTA LOS QUE QUIERO
-                item -> platosDestacadosElemento(item.drawable, item.text)
+                item -> cocinerosDestacadosElemento(item.drawable, item.text)
         }
     }
 }
