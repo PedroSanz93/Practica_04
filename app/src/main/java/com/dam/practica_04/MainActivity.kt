@@ -395,11 +395,10 @@ fun ventanaConsejo(
             .padding(10.dp)
             .animateContentSize()
     ){
-        Row (modifier= modifier.align(Alignment.BottomStart),
+        Row (modifier= modifier.align(Alignment.BottomStart).padding(10.dp),
              /*verticalAlignment = Alignment.CenterVertically*/){
             Text(modifier = Modifier
-                .weight(5f)
-                .padding(start = 16.dp),
+                .weight(5f),
                  text= taskName)
         }
         IconButton(onClick = onClose, modifier= modifier.align(Alignment.BottomEnd)) {
