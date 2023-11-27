@@ -379,6 +379,8 @@ fun ilustracionesGrid(
         }
     }
 }
+
+// <-------------------------------  AQUI HAY QUE VER LO DEL MENSAJE DE CERRAR Y ESO
 @Composable
 fun ventanaConsejo(
     taskName: String,
