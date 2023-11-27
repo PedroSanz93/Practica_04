@@ -190,6 +190,8 @@ private fun barraNavIconos(modifier: Modifier = Modifier) {
             icon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null)},
             label= { Text(text= stringResource(R.string.ic2))}
         )
+        // boton favoritos
+
         NavigationBarItem(
             selected = false,
             onClick = { /*TODO*/ },
@@ -376,6 +378,12 @@ fun ilustracionesGrid(
 // SURFACES EXPANDIDOS CON LAS RECETAS
 @Composable
 fun recetario1(){
+//    var showtask by remember { mutableStateOf(true) }
+//           if (showtask) {
+//              WellnessTaskItem(taskName = "¿Tas dao un paseillo por la plasa hoy primico?",
+//                 onClose = { showtask = false })
+//           }
+
     var isExpanded by remember { mutableStateOf(false) }
     Surface(
         color = MaterialTheme.colorScheme.primary,
