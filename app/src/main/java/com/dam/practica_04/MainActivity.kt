@@ -11,7 +11,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+//import androidx.compose.foundation.layout.ColumnScopeInstance.align
+//import androidx.compose.foundation.layout.ColumnScopeInstance.align
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,11 +39,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -374,16 +379,36 @@ fun ilustracionesGrid(
         }
     }
 }
+@Composable
+fun ventanaConsejo(
+    taskName: String,
+    onClose:() -> Unit,
+    modifier: Modifier = Modifier)
+{
+    Box (
+//        color = MaterialTheme.colorScheme.secondary,
+//        border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.primary),
+//        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .padding(10.dp)
+            .animateContentSize()
+    ){
+        Row (modifier= modifier.align(Alignment.BottomStart),
+             /*verticalAlignment = Alignment.CenterVertically*/){
+            Text(modifier = Modifier
+                .weight(5f)
+                .padding(start = 16.dp),
+                 text= taskName)
+        }
+        IconButton(onClick = onClose, modifier= modifier.align(Alignment.BottomEnd)) {
+            Icon(Icons.Filled.Close, contentDescription = "Close")
+        }
+    }
+}
 
 // SURFACES EXPANDIDOS CON LAS RECETAS
 @Composable
 fun recetario1(){
-//    var showtask by remember { mutableStateOf(true) }
-//           if (showtask) {
-//              WellnessTaskItem(taskName = "¿Tas dao un paseillo por la plasa hoy primico?",
-//                 onClose = { showtask = false })
-//           }
-
     var isExpanded by remember { mutableStateOf(false) }
     Surface(
         color = MaterialTheme.colorScheme.primary,
@@ -393,6 +418,7 @@ fun recetario1(){
             .padding(10.dp)
             .animateContentSize()
     ) {
+
         Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
             Text(
                 text ="TORTILLA DE PATATAS",
@@ -409,8 +435,12 @@ fun recetario1(){
                         "Sirve caliente o a temperatura ambiente. ¡Disfruta!",
                 maxLines = if (isExpanded) Int.MAX_VALUE else 1,
                 modifier = Modifier.padding(2.dp)
-
             )
+            var consejo by remember { mutableStateOf(true) }
+            if (consejo) {
+                ventanaConsejo(taskName = "Recuerda para esta receta hacer el corte de la patata fino*",
+                    onClose = { consejo = false })
+            }
         }
     }
 }
