@@ -86,7 +86,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 // MAIN PRINCIPAL
 @Composable
 fun principalAPP(windowSize: WindowSizeClass){
@@ -230,7 +229,6 @@ private fun botoneraIconosRail(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-
             NavigationRailItem(
                 label = { Text(stringResource(R.string.ic1)) },
                 selected = true,
