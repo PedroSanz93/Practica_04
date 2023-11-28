@@ -13,8 +13,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-//import androidx.compose.foundation.layout.ColumnScopeInstance.align
-//import androidx.compose.foundation.layout.ColumnScopeInstance.align
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -42,6 +40,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -77,7 +76,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dam.practica_04.ui.theme.Practica_04Theme
 
-
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,9 +83,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this)
             principalAPP(windowSizeClass)
-            }
         }
     }
+}
 
 // MAIN PRINCIPAL
 @Composable
@@ -254,17 +252,17 @@ private fun botoneraIconosRail(modifier: Modifier = Modifier) {
         }
     }
 }
- // BOTONERA COMPLETA
+// BOTONERA COMPLETA
 @Composable
 fun botonera(){
-     Practica_04Theme{
-         Surface(color= MaterialTheme.colorScheme.secondary) {
-             Row{
-                 botoneraIconosRail()
-                 pantallaAPP()
-             }
-         }
-     }
+    Practica_04Theme{
+        Surface(color= MaterialTheme.colorScheme.secondary) {
+            Row{
+                botoneraIconosRail()
+                pantallaAPP()
+            }
+        }
+    }
 }
 
 // ELEMETO INDIVIDUAL LAZY ROW PLATOS DESTACADOS
@@ -276,14 +274,14 @@ fun platosDestacadosElemento(
 )
 {
     Column(horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier)
+        modifier = modifier)
     {
         Image(painter = painterResource(drawable),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = modifier
-                    .size(88.dp)
-                    .clip(CircleShape)
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = modifier
+                .size(88.dp)
+                .clip(CircleShape)
         )
         Text(text= stringResource(text),
             modifier= Modifier.paddingFromBaseline(top= 24.dp, bottom= 8.dp),
@@ -313,9 +311,9 @@ fun tituloPlatosDestacados(){
 fun platosDestacadosRow(modifier: Modifier = Modifier)
 {
     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal= 16.dp),
-                modifier= modifier
-                    .padding(horizontal = 8.dp)
+        contentPadding = PaddingValues(horizontal= 16.dp),
+        modifier= modifier
+            .padding(horizontal = 8.dp)
     ){
         items(imagenes){// Llama a la lista IMAGENES QUE ES DONDE ESTA LOS QUE QUIERO
                 item -> platosDestacadosElemento(item.drawable, item.text)
@@ -380,37 +378,47 @@ fun ilustracionesGrid(
     }
 }
 
-// <-------------------------------  AQUI HAY QUE VER LO DEL MENSAJE DE CERRAR Y ESO
+// Funcion Ventana de consejo para recetas
 @Composable
 fun ventanaConsejo(
     taskName: String,
-    onClose:() -> Unit,
-    modifier: Modifier = Modifier)
-{
-    Box (
-//        color = MaterialTheme.colorScheme.secondary,
-//        border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.primary),
-//        shape = MaterialTheme.shapes.medium,
-        modifier = Modifier
-            .padding(10.dp)
-            .animateContentSize()
-    ){
-        Row (modifier= modifier.align(Alignment.BottomStart).padding(10.dp),
-             /*verticalAlignment = Alignment.CenterVertically*/){
-            Text(modifier = Modifier
-                .weight(5f),
-                 text= taskName)
-        }
-        IconButton(onClick = onClose, modifier= modifier.align(Alignment.BottomEnd)) {
-            Icon(Icons.Filled.Close, contentDescription = "Close")
+    onClose: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        color = MaterialTheme.colorScheme.primary,
+        border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.secondary),
+        shape = MaterialTheme.shapes.medium,
+        modifier = modifier.padding(10.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(10.dp),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = taskName
+            )
+            // boton cerrar
+            IconButton(
+                onClick = onClose,
+                modifier = Modifier.align(Alignment.Bottom)
+            ) {
+                // icono boton cerrar
+                Icon(Icons.Filled.Close, contentDescription = "Close")
+            }
         }
     }
 }
 
-// SURFACES EXPANDIDOS CON LAS RECETAS
+// SURFACES EXPANDIBLES CON LAS RECETAS Y LOGICAS PARA VENTANACONSEJO
 @Composable
-fun recetario1(){
+fun recetario1() {
+    // variable para expandir texto en false para que aparezca contraido
     var isExpanded by remember { mutableStateOf(false) }
+    // variable para mostrar consejo en false para que no aparezca inicialmente
+    var mostrarConsejo by remember { mutableStateOf(false) }
+
     Surface(
         color = MaterialTheme.colorScheme.primary,
         border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.tertiary),
@@ -419,80 +427,129 @@ fun recetario1(){
             .padding(10.dp)
             .animateContentSize()
     ) {
-
         Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
-            Text(
-                text ="TORTILLA DE PATATAS",
-                modifier = Modifier.padding(2.dp),
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "Corta y fríe patatas en rodajas en aceite de oliva hasta que estén tiernas.\n" +
-                        "Pica cebolla y bate huevos con sal.\n" +
-                        "Mezcla patatas y cebolla con huevos batidos.\n" +
-                        "Cocina en una sartén hasta que los bordes cuajen.\n" +
-                        "Voltea la tortilla para cocinar el otro lado.\n" +
-                        "Cocina hasta que esté cuajada pero jugosa por dentro.\n" +
-                        "Sirve caliente o a temperatura ambiente. ¡Disfruta!",
-                maxLines = if (isExpanded) Int.MAX_VALUE else 1,
-                modifier = Modifier.padding(2.dp)
-            )
-            var consejo by remember { mutableStateOf(true) }
-            if (consejo) {
-                ventanaConsejo(taskName = "Recuerda para esta receta hacer el corte de la patata fino*",
-                    onClose = { consejo = false })
+            Row(
+                modifier = Modifier.padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "TORTILLA DE PATATAS",
+                        modifier = Modifier.padding(2.dp),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Pasos a seguir: \n" +
+                                "Corta y fríe patatas en rodajas en aceite de oliva hasta que estén tiernas.\n" +
+                                "Pica cebolla y bate huevos con sal.\n" +
+                                "Mezcla patatas y cebolla con huevos batidos.\n" +
+                                "Cocina en una sartén hasta que los bordes cuajen.\n" +
+                                "Voltea la tortilla para cocinar el otro lado.\n" +
+                                "Cocina hasta que esté cuajada pero jugosa por dentro.\n" +
+                                "Sirve caliente o a temperatura ambiente. ¡Disfruta!",
+                        // si isExpande es true se expande entero y si es false se contrae y muestra el titulo
+                        maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                        modifier = Modifier.padding(2.dp)
+                    )
+                }
+                // si onClick que es clickar el boton esta en estado diferente
+                IconButton(
+                    onClick = { mostrarConsejo = !mostrarConsejo },
+                    modifier = Modifier.padding(start = 8.dp)
+                ) {
+                    // icono de la campanita
+                    Icon(Icons.Filled.Notifications, contentDescription = "Consejo")
+                }
+            }
+            // si es true muestra el consejo
+            if (mostrarConsejo) {
+                ventanaConsejo(
+                    taskName = "Recuerda para esta receta hacer el corte de la patata debe ser fino",
+                    // cierra al clickar cerrar en ventanaConsejo
+                    onClose = { mostrarConsejo = false },
+                    modifier = Modifier.padding(10.dp)
+                )
+            }
+        }
+    }
+}
+@Composable
+fun recetario2(){
+    // variable para expandir texto en false para que aparezca contraido
+    var isExpanded by remember { mutableStateOf(false) }
+    // variable para mostrar consejo en false para que no aparezca inicialmente
+    var mostrarConsejo by remember { mutableStateOf(false) }
+
+    Surface(
+        color = MaterialTheme.colorScheme.primary,
+        border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.tertiary),
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .padding(10.dp)
+            .animateContentSize()
+    ) {
+        Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
+            Row(
+                modifier = Modifier.padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "CARRILLADA",
+                        modifier = Modifier.padding(2.dp),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Preparación de la Carrillada:\n" +
+                                "\n" +
+                                "Sazona las carrilladas de cerdo con sal y pimienta.\n" +
+                                "Dóralas en una sartén con aceite caliente hasta que estén doradas por ambos lados.\n" +
+                                "Preparación de la Salsa:\n" +
+                                "\n" +
+                                "Pica cebolla, ajo y zanahoria.\n" +
+                                "Sofríe estos ingredientes en la misma sartén hasta que estén tiernos.\n" +
+                                "Añade vino tinto y caldo de carne. Deja cocinar hasta que la salsa se reduzca.\n" +
+                                "Cocción de la Carrillada:\n" +
+                                "\n" +
+                                "Coloca las carrilladas en la salsa y cocina a fuego lento hasta que estén tiernas.\n" +
+                                "Servir:\n" +
+                                "\n" +
+                                "Sirve las carrilladas bañadas en la salsa caliente.\n" +
+                                "Acompaña con guarniciones al gusto. ¡Listo para disfrutar!",
+                        // si isExpande es true se expande entero y si es false se contrae y muestra el titulo
+                        maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                        modifier = Modifier.padding(2.dp)
+                    )
+                }
+                // si onClick que es clickar el boton esta en estado diferente
+                IconButton(
+                    onClick = { mostrarConsejo = !mostrarConsejo },
+                    modifier = Modifier.padding(start = 8.dp)
+                ) {
+                    // icono de la campanita
+                    Icon(Icons.Filled.Notifications, contentDescription = "Consejo")
+                }
+            }
+            // si es true muestra el consejo
+            if (mostrarConsejo) {
+                ventanaConsejo(
+                    taskName = "Si quieres añadir patata al guiso, recuerda añadir un tercio mas de caldo y vino tinto y esperar a que la patata quede blanda",
+                    // cierra al clickar cerrar en ventanaConsejo
+                    onClose = { mostrarConsejo = false },
+                    modifier = Modifier.padding(10.dp)
+                )
             }
         }
     }
 }
 
 @Composable
-fun recetario2(){
-    var isExpanded by remember { mutableStateOf(false) }
-    Surface(
-        color = MaterialTheme.colorScheme.primary,
-        border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.tertiary),
-        shape = MaterialTheme.shapes.medium,
-        modifier = Modifier
-            .padding(10.dp)
-            .animateContentSize()
-    ) {
-        Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
-            Text(
-                text ="CARRILLADA",
-                modifier = Modifier.padding(2.dp),
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "Carrillada en Salsa\n" +
-                        "\n" +
-                        "Preparación de la Carrillada:\n" +
-                        "\n" +
-                        "Sazona las carrilladas de cerdo con sal y pimienta.\n" +
-                        "Dóralas en una sartén con aceite caliente hasta que estén doradas por ambos lados.\n" +
-                        "Preparación de la Salsa:\n" +
-                        "\n" +
-                        "Pica cebolla, ajo y zanahoria.\n" +
-                        "Sofríe estos ingredientes en la misma sartén hasta que estén tiernos.\n" +
-                        "Añade vino tinto y caldo de carne. Deja cocinar hasta que la salsa se reduzca.\n" +
-                        "Cocción de la Carrillada:\n" +
-                        "\n" +
-                        "Coloca las carrilladas en la salsa y cocina a fuego lento hasta que estén tiernas.\n" +
-                        "Servir:\n" +
-                        "\n" +
-                        "Sirve las carrilladas bañadas en la salsa caliente.\n" +
-                        "Acompaña con guarniciones al gusto. ¡Listo para disfrutar!",
-                maxLines = if (isExpanded) Int.MAX_VALUE else 1,
-                modifier = Modifier.padding(2.dp)
-
-            )
-        }
-    }
-}
-
-@Composable
 fun recetario3(){
+    // variable para expandir texto en false para que aparezca contraido
     var isExpanded by remember { mutableStateOf(false) }
+    // variable para mostrar consejo en false para que no aparezca inicialmente
+    var mostrarConsejo by remember { mutableStateOf(false) }
+
     Surface(
         color = MaterialTheme.colorScheme.primary,
         border = BorderStroke(1.5.dp, color = MaterialTheme.colorScheme.tertiary),
@@ -502,39 +559,61 @@ fun recetario3(){
             .animateContentSize()
     ) {
         Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
-            Text(
-                text ="COCIDO",
-                modifier = Modifier.padding(2.dp),
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "Cocido Tradicional\n" +
-                        "\n" +
-                        "Preparación de Ingredientes:\n" +
-                        "\n" +
-                        "Lava y corta vegetales como zanahorias, patatas y apio.\n" +
-                        "Trocea carne de res, pollo y chorizo.\n" +
-                        "Cocción del Caldo:\n" +
-                        "\n" +
-                        "Hierve la carne en agua con sal hasta que se forme un caldo sabroso.\n" +
-                        "Añade las verduras y cocina a fuego medio hasta que estén tiernas.\n" +
-                        "Cocido de Legumbres:\n" +
-                        "\n" +
-                        "Incorpora garbanzos y judías.\n" +
-                        "Cocina hasta que las legumbres estén tiernas y sabrosas.\n" +
-                        "Cocción de Embutidos:\n" +
-                        "\n" +
-                        "Agrega chorizo y morcilla al caldo para potenciar el sabor.\n" +
-                        "Cocina hasta que los embutidos estén bien cocidos.\n" +
-                        "Presentación:\n" +
-                        "\n" +
-                        "Sirve en platos hondos separando caldo, carne, verduras y legumbres.\n" +
-                        "Acompaña con salsa de tomate y guindillas al gusto.\n" +
-                        "¡Disfruta de este reconfortante cocido!",
-                maxLines = if (isExpanded) Int.MAX_VALUE else 1,
-                modifier = Modifier.padding(2.dp)
-
-            )
+            Row(
+                modifier = Modifier.padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "COCIDO",
+                        modifier = Modifier.padding(2.dp),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Preparación de Ingredientes:\n" +
+                                "\n" +
+                                "Lava y corta vegetales como zanahorias, patatas y apio.\n" +
+                                "Trocea carne de res, pollo y chorizo.\n" +
+                                "Cocción del Caldo:\n" +
+                                "\n" +
+                                "Hierve la carne en agua con sal hasta que se forme un caldo sabroso.\n" +
+                                "Añade las verduras y cocina a fuego medio hasta que estén tiernas.\n" +
+                                "Cocido de Legumbres:\n" +
+                                "\n" +
+                                "Incorpora garbanzos y judías.\n" +
+                                "Cocina hasta que las legumbres estén tiernas y sabrosas.\n" +
+                                "Cocción de Embutidos:\n" +
+                                "\n" +
+                                "Agrega chorizo y morcilla al caldo para potenciar el sabor.\n" +
+                                "Cocina hasta que los embutidos estén bien cocidos.\n" +
+                                "Presentación:\n" +
+                                "\n" +
+                                "Sirve en platos hondos separando caldo, carne, verduras y legumbres.\n" +
+                                "Acompaña con salsa de tomate y guindillas al gusto.\n" +
+                                "¡Disfruta de este reconfortante cocido!",
+                        // si isExpande es true se expande entero y si es false se contrae y muestra el titulo
+                        maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                        modifier = Modifier.padding(2.dp)
+                    )
+                }
+                // si onClick que es clickar el boton esta en estado diferente
+                IconButton(
+                    onClick = { mostrarConsejo = !mostrarConsejo },
+                    modifier = Modifier.padding(start = 8.dp)
+                ) {
+                    // icono de la campanita
+                    Icon(Icons.Filled.Notifications, contentDescription = "Consejo")
+                }
+            }
+            // si es true muestra el consejo
+            if (mostrarConsejo) {
+                ventanaConsejo(
+                    taskName = "Importante: Reutiliza el avío para preparar cocretas de puchero, ideales para acompañar cualquier comida",
+                    // cierra al clickar cerrar en ventanaConsejo
+                    onClose = { mostrarConsejo = false },
+                    modifier = Modifier.padding(10.dp)
+                )
+            }
         }
     }
 }
@@ -671,7 +750,7 @@ fun barraBuscadorPreview() {
 @Composable
 fun platosDestacadosElementoPreview(){
     platosDestacadosElemento(drawable= R.drawable.fotoplato1,
-                                text= R.string.fotoplato1)
+        text= R.string.fotoplato1)
 }
 // PREVIEW TITULO PLATOS DESTACADOS
 @Preview(showBackground = true)
@@ -691,8 +770,8 @@ fun platosDestacadosRowPreview(){
 @Composable
 fun ilustracionElementoPreview(){
     ilustracionElemento(modifier= Modifier.padding(8.dp),
-                        drawable = R.drawable.ilustracion1,
-                        text = R.string.ilustracion1)
+        drawable = R.drawable.ilustracion1,
+        text = R.string.ilustracion1)
 }
 // PREVIEW TITULO ILUSTRACIONES
 @Preview(showBackground = true)
