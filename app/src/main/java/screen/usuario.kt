@@ -83,9 +83,6 @@ fun pantallaAPP3(modifier: Modifier= Modifier){
     seccionPrincipal2(title = R.string.usuario) { // CAMBIAR TITULO <---------------------------
     }
     Surface {
-
-            Text(text = "Usuario: ")
-
         formulario()
     }
 }
@@ -101,7 +98,7 @@ fun formulario(modifier: Modifier = Modifier)
                 contentDescription= null)
         },
         placeholder = {
-            Text("Escribe aqui")
+            Text("USUARIO")
         },
         modifier= modifier
             .fillMaxWidth()
