@@ -75,17 +75,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dam.practica_04.ui.theme.Practica_04Theme
+import navegacion.navegacion
 import screen.principalAPP
 import screen.principalAPP2
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val windowSizeClass = calculateWindowSizeClass(this)
-            principalAPP(windowSizeClass)
-            principalAPP2(windowSizeClass)
+            navegacion()
         }
     }
 }

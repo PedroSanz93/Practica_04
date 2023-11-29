@@ -1,5 +1,4 @@
 package screen
-
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
@@ -48,6 +47,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -63,22 +63,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.dam.practica_04.R
 import com.dam.practica_04.ui.theme.Practica_04Theme
+import navegacion.rutasNavegacion
+@Composable
+fun pantallaInicio(navController: NavController){
+    principalAPP(navController)
+}
 
 // MAIN PRINCIPAL
 @Composable
-fun principalAPP(windowSize: WindowSizeClass){
-    when(windowSize.widthSizeClass){
-        WindowWidthSizeClass.Compact ->{
-            botoneraIconos()
+fun principalAPP(navController: NavController){
+   // when(windowSize.widthSizeClass){
+     //   WindowWidthSizeClass.Compact ->{
+           botoneraIconos(navController)
+       // }
+       // WindowWidthSizeClass.Medium ->{
+         //   botonera(navController)
         }
-        WindowWidthSizeClass.Medium ->{
-            botonera()
-        }
-    }
-}
+   // }
+//}
 // SECCION RANURA PRINCIPAL
 @Composable
 fun seccionPrincipal(
@@ -159,25 +167,26 @@ fun barraBuscador(modifier: Modifier = Modifier)
 
 // ICONOS BARRA NAVEGACION
 @Composable
-fun barraNavIconos(modifier: Modifier = Modifier) {
-    NavigationBar(modifier= modifier, containerColor = MaterialTheme.colorScheme.secondary) {
+fun barraNavIconos(navController: NavController) {
+    NavigationBar( containerColor = MaterialTheme.colorScheme.secondary) {
+        // boton inicio
         NavigationBarItem(
             selected = true,
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(route = rutasNavegacion.ventanaInicio.ruta) },
             icon = { Icon(imageVector = Icons.Default.Home, contentDescription = null) },
             label= { Text(text= stringResource(R.string.ic1)) }
         )
+        //boton usuario
         NavigationBarItem(
             selected = false,
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(route = rutasNavegacion.ventanaUsuario.ruta) },
             icon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null) },
             label= { Text(text= stringResource(R.string.ic2)) }
         )
         // boton favoritos
-
         NavigationBarItem(
             selected = false,
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(route = rutasNavegacion.ventanaFavoritos.ruta) },
             icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = null) },
             label= { Text(text= stringResource(R.string.ic3)) }
         )
@@ -186,10 +195,10 @@ fun barraNavIconos(modifier: Modifier = Modifier) {
 
 // BOTONERA ICONOS
 @Composable
-fun botoneraIconos() {
+fun botoneraIconos(navController: NavController) {
     Practica_04Theme {
         Scaffold(
-            bottomBar = { barraNavIconos()}
+            bottomBar = { barraNavIconos(navController)}
         ) {
                 padding -> pantallaAPP(Modifier.padding(padding))
         }
@@ -199,13 +208,13 @@ fun botoneraIconos() {
 
 // RAIL PARA ICONOS VERTICAL/HORIZONTAL NAVEGACION
 @Composable
-fun botoneraIconosRail(modifier: Modifier = Modifier) {
+fun botoneraIconosRail(navController: NavController) {
     NavigationRail(
-        modifier = modifier.padding(start = 8.dp, end = 8.dp),
+        //modifier = modifier.padding(start = 8.dp, end = 8.dp),
         containerColor = MaterialTheme.colorScheme.secondary
     ) {
         Column(
-            modifier = modifier.fillMaxHeight(),
+            //modifier = modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         )
@@ -213,19 +222,19 @@ fun botoneraIconosRail(modifier: Modifier = Modifier) {
             NavigationRailItem(
                 label = { Text(stringResource(R.string.ic1)) },
                 selected = true,
-                onClick = { /*TODO*/ },
+                onClick = {  navController.navigate(route = rutasNavegacion.ventanaInicio.ruta) },
                 icon = { Icon(imageVector = Icons.Default.Home, contentDescription = null) }
             )
             NavigationRailItem(
                 label = { Text(stringResource(R.string.ic2)) },
                 selected = false,
-                onClick = { /*TODO*/ },
+                onClick = { navController.navigate(route = rutasNavegacion.ventanaUsuario.ruta) },
                 icon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null) }
             )
             NavigationRailItem(
                 label = { Text(stringResource(R.string.ic3)) },
                 selected = false,
-                onClick = { /*TODO*/ },
+                onClick = { navController.navigate(route = rutasNavegacion.ventanaFavoritos.ruta) },
                 icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = null) }
             )
         }
@@ -233,11 +242,11 @@ fun botoneraIconosRail(modifier: Modifier = Modifier) {
 }
 // BOTONERA COMPLETA
 @Composable
-fun botonera(){
+fun botonera(navController: NavController){
     Practica_04Theme{
         Surface(color= MaterialTheme.colorScheme.secondary) {
             Row{
-                botoneraIconosRail()
+                botoneraIconosRail(navController)
                 pantallaAPP()
             }
         }
@@ -697,8 +706,8 @@ val iconos = listOf(
     R.drawable.ic3 to R.string.ic3
 ).map { DrawableStringPair(it.first, it.second) }
 // LISTA FOTOS USUARIO (NO SE USA AL FINAL)
-val usuariosImagen = listOf(
-
-    R.drawable.us1 to R.string.us1,
-    R.drawable.us2 to R.string.us2,
-).map { DrawableStringPair(it.first, it.second) }
+//val usuariosImagen = listOf(
+//
+//    R.drawable.us1 to R.string.us1,
+//    R.drawable.us2 to R.string.us2,
+//).map { DrawableStringPair(it.first, it.second) }

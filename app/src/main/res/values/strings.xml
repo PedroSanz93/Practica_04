@@ -21,8 +21,8 @@
     <string name="ic1">INICIO</string>
     <string name="ic2">USUARIO</string>
     <string name="ic3">FAVORITOS</string>
-    <string name="us1">us1</string>
-    <string name="us2">us2</string>
+    <string name="favoritos">Favoritos</string>
+    <string name="usuario">Usuario</string>
     <string name="lupa">Buscar..</string>
     <string name="arguiyano">Carlos Arguiñano</string>
     <string name="danig">Dani Garcia</string>
