@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -152,54 +153,75 @@ fun elementoLista(
     }
 }
 
-// funcion recargada para modificar el checkbox
+// funcion lista valoraciones
 @Composable
 fun elementoLista(
     checkedStates: List<List<Boolean>>,
     onCheckedChange: (List<List<Boolean>>) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // lista de nombres para cada fila de checkboxes
+    val listanombre = listOf(
+        "Taberna la Abuela",
+        "La fabrica",
+        "El mordisquito",
+        "Meson el barrio",
+        "Mirador del rio"
+    )
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        // Variable lista que guarda los valores del checkbox
-        val listanombre = listOf(
-            "Taberna la Abuela",
-            "La fabrica",
-            "El mordisquito",
-            "Meson el barrio",
-            "Mirador del rio"
-        )
-        // Recorre lista de nombres y asigna cada string a un grupo de checkboxes
+        // for que recorre las row de cada checkbox
         for (indice in 0 until listanombre.size) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(8.dp)
             ) {
-                // repeat hace que se repita el checkbox 5 veces
+                val rowCheckedStates = checkedStates[indice].toMutableList()
+                var lastCheckedIndex = -1
+
+                // repeat hace que se repita 5 veces el checkbox ahorrando codigo
                 repeat(5) { innerIndex ->
                     Checkbox(
-                        // define el estado del checkbox segun su indice
-                        checked = checkedStates[indice][innerIndex],
-                        // define la funcion que marca o desmarca el checkbox
+                        checked = rowCheckedStates[innerIndex],
                         onCheckedChange = { isChecked ->
-                            // variable que guarda el estado de la lista
-                            val nuevoEstado = checkedStates.toMutableList()
-                            // recorre el indice de 1 en 1
-                            for (i in 0 until innerIndex + 1) {
-                                // variable para guardar estado de la posicion actual
-                                val estadoDentroLista = nuevoEstado[indice].toMutableList()
-                                // cambia el estado del checkbox de marcado a desmarcado o viceversa
-                                estadoDentroLista[i] = isChecked
-                                // avisa a la lista del cambio de estado
-                                nuevoEstado[indice] = estadoDentroLista
+                            // si esta marcado
+                            if (isChecked) {
+                                // marca todos los checkbox anteriores a en el que esta
+                                for (i in 0..innerIndex) {
+                                    rowCheckedStates[i] = true
+                                }
+                                lastCheckedIndex = innerIndex
+                                // si la posicion por la que va esta marcada
+                            } else if (innerIndex == lastCheckedIndex && isChecked) {
+                                // desmarca el checkbox  marcado
+                                rowCheckedStates[innerIndex] = false
+                                // si el incide es mayor a la ultima posicion del indice
+                            } else if (innerIndex > lastCheckedIndex) {
+                                // no permite desmarcar los checkbox anteriores al utlimo
+                                rowCheckedStates[innerIndex] = true
                             }
-                            // informa de los cambios de estado en los checkbox
-                            onCheckedChange(nuevoEstado)
+
+                            // actualiza el estado de la lista
+                            val newState = checkedStates.toMutableList()
+                            newState[indice] = rowCheckedStates.toList()
+                            onCheckedChange(newState)
                         }
                     )
                 }
-                Spacer(modifier = Modifier.width(8.dp)) // Espacio entre checkbox y texto
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(text = listanombre[indice])
             }
+        }
+        // boton al final para desmarcar todos los checkboxes
+        Button(
+            onClick = {
+                // crea una nueva lista con todos los checkboxes desmarcados
+                val newStates = List(listanombre.size) { List(5) { false } }
+                // llama a la función onCheckedChange para actualizar todos los estados de los checkboxes
+                onCheckedChange(newStates)
+            },
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            Text("ENVIAR VALORACION")
         }
     }
 }

@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Las Recetas de la Concejala</string>
     <string name="TITULO1">PLATOS DESTACADOS</string>
     <string name="fotoplato1">Lentejas</string>
     <string name="fotoplato2">Pasta</string>
