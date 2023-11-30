@@ -100,7 +100,7 @@ fun seccionPrincipal2(
     }
 }
 
-// AQUI HAY QUE METER LA TASKLIST CON IMAGENES
+// pantalla2
 @Composable
 fun pantallaAPP2(modifier: Modifier = Modifier) {
     Surface(

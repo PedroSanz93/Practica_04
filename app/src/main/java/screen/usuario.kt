@@ -116,7 +116,7 @@ fun pantallaAPP3(modifier: Modifier = Modifier) {
         }
     }
 }
-
+// formulario
 @Composable
 fun formulario() {
     // variables mutables que guardan el valor del texto que se introduce en usuario y contraseña

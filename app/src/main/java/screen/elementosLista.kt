@@ -3,7 +3,7 @@ package screen
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-
+// elementos del checklist
 data class elementosLista(
     val id: Int,
     val label: String,
