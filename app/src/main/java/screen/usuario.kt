@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -57,16 +58,13 @@ import navegacion.rutasNavegacion
 fun pantallaUsuario(navController: NavController) {
     principalAPP3(navController)
 }
-
-
-// AQUI HAY QUE METER LA TASKLIST DE FAVORITOS
 @Composable
 fun principalAPP3(navController: NavController) {
+                                            // <-------- INTENTO DE USAR WINDOWSIZECLASS
     // when(windowSize.widthSizeClass){
     //  WindowWidthSizeClass.Compact ->{
     botoneraIconos3(navController)
 }
-
 //WindowWidthSizeClass.Medium ->{
 //   botonera2(navController = rememberNavController())
 //  }
@@ -93,7 +91,6 @@ fun seccionPrincipal3(
         content()
     }
 }
-
 // AQUI HAY QUE HACER UN FORMULARIO CON LA BARRA DE BUSCARDOR DE INICIO QUE TENGA USUARIO Y CONTRASEÑA
 @Composable
 fun pantallaAPP3(modifier: Modifier = Modifier) {
@@ -122,6 +119,11 @@ fun formulario() {
     // variables mutables que guardan el valor del texto que se introduce en usuario y contraseña
     var texto by remember { mutableStateOf("") }
     var texto2 by remember { mutableStateOf("") }
+    // funcion interna para vaciar el formulario a traves de un boton
+    fun vaciarFormulario(){
+        texto=""
+        texto2=""
+    }
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -170,11 +172,14 @@ fun formulario() {
                     Text(text = "Escribe aquí...")
                 }
             )
+            Spacer(modifier = Modifier.padding(8.dp))
+            // boton que al clickar llama a la funcion que borra los campos del formulario
+            Button(onClick={ vaciarFormulario()}){
+                Text("INICIO SESION")
+            }
         }
     }
 }
-
-
 // ICONOS BARRA NAVEGACION
 @Composable
 fun barraNavIconos3(navController: NavController) {
@@ -202,8 +207,7 @@ fun barraNavIconos3(navController: NavController) {
     }
 }
 
-// BOTONERA ICONOS
-@OptIn(ExperimentalMaterial3Api::class)
+// SCAFFOLD LO MOTAN Y LO MANDA A PRINCIPALAPP
 @Composable
 fun botoneraIconos3(navController: NavController) {
     Practica_04Theme {

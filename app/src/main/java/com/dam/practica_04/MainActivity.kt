@@ -78,7 +78,7 @@ import com.dam.practica_04.ui.theme.Practica_04Theme
 import navegacion.navegacion
 import screen.principalAPP
 import screen.principalAPP2
-
+// MAIN
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 /*
-// MAIN PRINCIPAL
+// APP DE LA PRACTICA 4 SIN EVENTOS
 @Composable
 fun principalAPP(windowSize: WindowSizeClass){
     when(windowSize.widthSizeClass){

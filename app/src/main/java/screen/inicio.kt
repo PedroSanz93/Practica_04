@@ -74,10 +74,9 @@ import navegacion.rutasNavegacion
 fun pantallaInicio(navController: NavController){
     principalAPP(navController)
 }
-
-// MAIN PRINCIPAL
 @Composable
 fun principalAPP(navController: NavController){
+                                    // <-------- INTENTO DE USAR WINDOWSIZECLASS
    // when(windowSize.widthSizeClass){
      //   WindowWidthSizeClass.Compact ->{
            botoneraIconos(navController)
@@ -164,7 +163,6 @@ fun barraBuscador(modifier: Modifier = Modifier)
             .heightIn(min = 56.dp)
     )
 }
-
 // ICONOS BARRA NAVEGACION
 @Composable
 fun barraNavIconos(navController: NavController) {
@@ -192,7 +190,6 @@ fun barraNavIconos(navController: NavController) {
         )
     }
 }
-
 // BOTONERA ICONOS
 @Composable
 fun botoneraIconos(navController: NavController) {
@@ -205,7 +202,6 @@ fun botoneraIconos(navController: NavController) {
     }
 
 }
-
 // RAIL PARA ICONOS VERTICAL/HORIZONTAL NAVEGACION
 @Composable
 fun botoneraIconosRail(navController: NavController) {
@@ -252,7 +248,6 @@ fun botonera(navController: NavController){
         }
     }
 }
-
 // ELEMETO INDIVIDUAL LAZY ROW PLATOS DESTACADOS
 @Composable
 fun platosDestacadosElemento(
@@ -530,7 +525,6 @@ fun recetario2(){
         }
     }
 }
-
 @Composable
 fun recetario3(){
     // variable para expandir texto en false para que aparezca contraido

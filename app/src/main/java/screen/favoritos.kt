@@ -63,11 +63,9 @@ import navegacion.rutasNavegacion
 fun pantallaFavoritos(navController: NavController) {
     principalAPP2(navController)
 }
-
-
-// AQUI HAY QUE METER LA TASKLIST DE FAVORITOS
 @Composable
 fun principalAPP2(navController: NavController) {
+                                            // <-------- INTENTO DE USAR WINDOWSIZECLASS
     // when(windowSize.widthSizeClass){
     //  WindowWidthSizeClass.Compact ->{
     botoneraIconos2(navController)
@@ -96,10 +94,9 @@ fun seccionPrincipal2(
                 )
                 .padding(horizontal = 16.dp)
         )
-        content()
+        //content()
     }
 }
-
 // pantalla2
 @Composable
 fun pantallaAPP2(modifier: Modifier = Modifier) {
@@ -125,7 +122,6 @@ fun pantallaAPP2(modifier: Modifier = Modifier) {
         }
     }
 }
-
 // funcion para el elemento de la lista
 @Composable
 fun elementoLista(
@@ -149,9 +145,10 @@ fun elementoLista(
             checked = checked,
             onCheckedChange = onCheckedChange
         )
-        IconButton(onClick = onClose) {
-            Icon(Icons.Filled.Star, contentDescription = "estrellas")
-        }
+//        intento de hacer estrella el checkbox
+//        IconButton(onClick = onClose) {
+//            Icon(Icons.Filled.Star, contentDescription = "estrellas")
+//        }
     }
 }
 
@@ -171,29 +168,37 @@ fun elementoLista(
             "Meson el barrio",
             "Mirador del rio"
         )
-
         // Recorre lista de nombres y asigna cada string a un grupo de checkboxes
-        for (index in 0 until listanombre.size) {
+        for (indice in 0 until listanombre.size) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(8.dp)
             ) {
-                // Checkboxes independientes
+                // repeat hace que se repita el checkbox 5 veces
                 repeat(5) { innerIndex ->
                     Checkbox(
-                        checked = checkedStates[index][innerIndex],
+                        // define el estado del checkbox segun su indice
+                        checked = checkedStates[indice][innerIndex],
+                        // define la funcion que marca o desmarca el checkbox
                         onCheckedChange = { isChecked ->
-                            val newStates = checkedStates.toMutableList()
-                            val innerList = newStates[index].toMutableList()
-                            innerList[innerIndex] = isChecked
-                            newStates[index] = innerList
-                            onCheckedChange(newStates)
+                            // variable que guarda el estado de la lista
+                            val nuevoEstado = checkedStates.toMutableList()
+                            // recorre el indice de 1 en 1
+                            for (i in 0 until innerIndex + 1) {
+                                // variable para guardar estado de la posicion actual
+                                val estadoDentroLista = nuevoEstado[indice].toMutableList()
+                                // cambia el estado del checkbox de marcado a desmarcado o viceversa
+                                estadoDentroLista[i] = isChecked
+                                // avisa a la lista del cambio de estado
+                                nuevoEstado[indice] = estadoDentroLista
+                            }
+                            // informa de los cambios de estado en los checkbox
+                            onCheckedChange(nuevoEstado)
                         }
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp)) // Espacio entre checkbox y texto
-
-                Text(text = listanombre[index])
+                Text(text = listanombre[indice])
             }
         }
     }
@@ -204,8 +209,9 @@ fun listaFavoritos(
     onCheckedChange: (List<List<Boolean>>) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // variable mutable que inicia una lista de 5 elementos en estado false
     var checkedStates by remember { mutableStateOf(List(5) { List(5) { false } }) }
-
+    // lazy column para integrar todos los elementos de la pantalla
     LazyColumn(modifier = modifier) {
         item {
             Text(
@@ -224,10 +230,8 @@ fun listaFavoritos(
         }
     }
     // Llamada a la función para manejar los cambios en los checkboxes
-    onCheckedChange(checkedStates)
+   // onCheckedChange(checkedStates)
 }
-
-
 // ICONOS BARRA NAVEGACION
 @Composable
 fun barraNavIconos2(navController: NavController) {
@@ -254,7 +258,6 @@ fun barraNavIconos2(navController: NavController) {
         )
     }
 }
-
 // BOTONERA ICONOS
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -268,7 +271,6 @@ fun botoneraIconos2(navController: NavController) {
     }
 
 }
-
 // RAIL PARA ICONOS VERTICAL/HORIZONTAL NAVEGACION
 @Composable
 fun botoneraIconosRail2(navController: NavController) {
