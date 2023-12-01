@@ -156,8 +156,8 @@ fun elementoLista(
 // funcion lista valoraciones
 @Composable
 fun elementoLista(
-    checkedStates: List<List<Boolean>>,
-    onCheckedChange: (List<List<Boolean>>) -> Unit,
+    checkedStates: List<List<Boolean>>, // lista con el estado de los checkbox
+    onCheckedChange: (List<List<Boolean>>) -> Unit, // funcion para el manejo de los cambios de estado de los checkbox
     modifier: Modifier = Modifier
 ) {
     // lista de nombres para cada fila de checkboxes
@@ -175,22 +175,26 @@ fun elementoLista(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(8.dp)
             ) {
+                // estado checkbox en una fila y es mutable para cambiar el valor
                 val rowCheckedStates = checkedStates[indice].toMutableList()
+                // variable que guarda el indice del ultimo checkbox y es -1 para asegurar que no hay ninguno marcado en la fila
                 var lastCheckedIndex = -1
 
                 // repeat hace que se repita 5 veces el checkbox ahorrando codigo
                 repeat(5) { innerIndex ->
                     Checkbox(
+                        // verifica estado de check en una fila por el indice y comprueba cual esta marcado en la fila
                         checked = rowCheckedStates[innerIndex],
+                        // parametro que controla el cambio de estado(booleano) cambia si el usuario marca si isChecked es true o false
                         onCheckedChange = { isChecked ->
-                            // si esta marcado
+                            // si esta marcado es true, recorre el for y marca todos los anteriores al anterior marcado
                             if (isChecked) {
-                                // marca todos los checkbox anteriores a en el que esta
+                                // recorre la file y pone true hasta el check marcado y los anteriores
                                 for (i in 0..innerIndex) {
-                                    rowCheckedStates[i] = true
+                                    rowCheckedStates[i] = true // segun el indice pone los check a true
                                 }
                                 lastCheckedIndex = innerIndex
-                                // si la posicion por la que va esta marcada
+                                // si el indice actual(innerIndex) el igual al ultimo marcado(lastChechekIndex) y el checkbox esta marcado
                             } else if (innerIndex == lastCheckedIndex && isChecked) {
                                 // desmarca el checkbox  marcado
                                 rowCheckedStates[innerIndex] = false
@@ -201,8 +205,11 @@ fun elementoLista(
                             }
 
                             // actualiza el estado de la lista
+                            // guarda un nuevo estado en funcion al estado de los checkbox originales(checkStates)
                             val newState = checkedStates.toMutableList()
+                            // actualiza el estado de la fila(rowCheckedChage)
                             newState[indice] = rowCheckedStates.toList()
+                            // se le pasa al parametro el booleano del estado actual
                             onCheckedChange(newState)
                         }
                     )
@@ -216,7 +223,7 @@ fun elementoLista(
             onClick = {
                 // crea una nueva lista con todos los checkboxes desmarcados
                 val newStates = List(listanombre.size) { List(5) { false } }
-                // llama a la función onCheckedChange para actualizar todos los estados de los checkboxes
+                // llama a la función onCheckedChange para que se pongan a cero todos los estados de los checkbox pasandole el valor de la variable a false
                 onCheckedChange(newStates)
             },
             modifier = Modifier.padding(top = 16.dp)
